@@ -195,14 +195,34 @@ section { padding: 96px 0; }
   align-items: center;
   padding-top: 120px;
   padding-bottom: 80px;
-  background: var(--cream);
+  /* fallback crème si la photo ne charge pas */
+  background-color: var(--cream);
   overflow: hidden;
+}
+/* Photo de fond + voile dégradé crème (texte ink/blush lisible à gauche).
+   Image stock externe — seule dépendance CDN du site. À remplacer par une
+   vraie photo locale (assets/hero.jpg) pour rester 100% autonome. */
+.hero__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image:
+    linear-gradient(100deg,
+      var(--cream) 0%,
+      rgba(250, 246, 241, 0.94) 28%,
+      rgba(250, 246, 241, 0.60) 58%,
+      rgba(250, 246, 241, 0.22) 100%),
+    url("https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=2000&q=80");
+  background-size: cover;
+  background-position: center right;
+  pointer-events: none;
 }
 .hero::after {
   content: "";
   position: absolute;
   inset: auto 0 0 0;
   height: 60%;
+  z-index: 1;
   background-image: var(--plan);
   background-size: 320px 320px;
   opacity: 0.04;
@@ -555,6 +575,15 @@ a.channel__value:hover { color: var(--gold); }
 
 @media (max-width: 768px) {
   section { padding: 72px 0; }
+  /* voile plus opaque et vertical : le texte passe par-dessus la photo */
+  .hero__bg {
+    background-image:
+      linear-gradient(180deg,
+        rgba(250, 246, 241, 0.96) 0%,
+        rgba(250, 246, 241, 0.82) 45%,
+        rgba(250, 246, 241, 0.45) 100%),
+      url("https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=2000&q=80");
+  }
   .nav__links, .header .btn-primary { display: none; }
   .burger { display: flex; }
   .apropos__grid { grid-template-columns: 1fr; gap: 40px; }
@@ -621,6 +650,7 @@ a.channel__value:hover { color: var(--gold); }
 
 <!-- ===== HERO ===== -->
 <section class="hero" id="hero">
+  <div class="hero__bg" aria-hidden="true"></div>
   <div class="container">
     <div class="hero__content reveal">
       <p class="eyebrow">Décoratrice d'intérieur · Designer d'espace</p>
